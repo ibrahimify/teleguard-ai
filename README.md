@@ -1,16 +1,18 @@
-# TeleGuard AI
+# TeleGuardÂ AI
 
-Real-time Telegram bot that detects spam with a TF-IDF + Logistic Regression model.
+Realâ€‘time Telegram bot that detects spam with a TFâ€‘IDFÂ +Â Logistic Regression model.
 
 ## Tech stack
-- Python 3.11, scikit-learn, pandas, numpy
-- python-telegram-bot
-- Docker (coming soon) · GitHub Actions CI (coming soon)
+- PythonÂ 3.11, scikitâ€‘learn, pandas, numpy
+- pythonâ€‘telegramâ€‘bot
+- Docker (coming soon) Â· GitHubÂ Actions CI (coming soon)
 
 ## Quick start
 ```bash
-git clone https://github.com/<your-username>/teleguard-ai
+git clone https://github.com/ibrahimify/teleguard-ai
 cd teleguard-ai
+
+```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 python train.py          # build model  (todo)
