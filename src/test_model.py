@@ -5,42 +5,39 @@ from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 import re
 
-# Download NLTK resources
-nltk.download('stopwords')
+# Download NLTK stopwords if not already present
+nltk.download('stopwords', quiet=True)
 
-# Load both models
+# Load the Voting Classifier model and vectorizer
 try:
-    model_lr = joblib.load("models/spam_classifier_lr.pkl")
-    model_nb = joblib.load("models/spam_classifier_nb.pkl")
+    model = joblib.load("models/spam_classifier_voting.pkl")
     vectorizer = joblib.load("models/tfidf_vectorizer.pkl")
-    print("Models and vectorizer loaded successfully!")
+    print("✅ Models and vectorizer loaded successfully!")
 except Exception as e:
-    print(f"Error loading models or vectorizer: {e}")
+    print(f"❌ Error loading models or vectorizer: {e}")
     exit()
 
-# Text cleaning function
+# Text preprocessing
 ps = PorterStemmer()
 
 def clean_text(text):
-    # Remove URLs
-    text = re.sub(r"http\S+|www\S+|https\S+", '', text, flags=re.MULTILINE)
-    text = text.lower()  # Convert to lowercase
-    text = text.translate(str.maketrans("", "", string.punctuation))  # Remove punctuation
-    text = ''.join([char for char in text if not char.isdigit()])  # Remove numbers
-    words = text.split()  # Split into words
-    words = [word for word in words if word not in stopwords.words('english')]  # Remove stopwords
-    words = [ps.stem(word) for word in words]  # Stemming
+    text = re.sub(r"http\S+|www\S+|https\S+", '', text)
+    text = text.lower()
+    text = text.translate(str.maketrans("", "", string.punctuation))
+    text = ''.join([char for char in text if not char.isdigit()])
+    words = text.split()
+    words = [word for word in words if word not in stopwords.words('english')]
+    words = [ps.stem(word) for word in words]
     return ' '.join(words)
 
+# Predict message using VotingClassifier
 def predict_message(message):
-    cleaned_message = clean_text(message)
-    features = vectorizer.transform([cleaned_message]).toarray()
-    prediction_lr = model_lr.predict(features)
-    prediction_nb = model_nb.predict(features)
-    return ("Spam" if prediction_lr[0] == 1 else "Ham", 
-            "Spam" if prediction_nb[0] == 1 else "Ham")
+    cleaned = clean_text(message)
+    features = vectorizer.transform([cleaned])
+    prediction = model.predict(features)[0]
+    return "Spam" if prediction == 1 else "Ham"
 
-# Sample test cases
+# Sample messages
 messages = [
     "Congratulations! You've won a $1000 Walmart gift card. Go to http://bit.ly/1234 to claim now.",
     "Hey, are we still on for coffee tomorrow?",
@@ -49,7 +46,8 @@ messages = [
     "Get 50% discount on all products. Visit our website now!"
 ]
 
-print("\nModel Predictions:")
+# Run predictions
+print("\n📨 Model Predictions:")
 for msg in messages:
-    result_lr, result_nb = predict_message(msg)
-    print(f"Message: {msg}\nLogistic Regression: {result_lr}\nNaive Bayes: {result_nb}\n")
+    result = predict_message(msg)
+    print(f"Message: {msg}\nPrediction: {result}\n")
