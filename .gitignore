@@ -1,7 +1,20 @@
-# Ignore virtual environment
+# Python cache and compiled files
+__pycache__/
+*.pyc
+
+# Virtual environments
 .venv/
 
-# Ignore large model files and datasets
-data/*.pkl
-models/*.pkl
+# Logs
+*.log
+
+# Data and model artifacts (avoid committing large files)
+*.pkl
 *.dll
+models/
+data/
+
+# Environment config
+.env
+
+.DS_Store".env" 
