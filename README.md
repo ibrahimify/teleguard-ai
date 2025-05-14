@@ -83,12 +83,12 @@ GitHub Secrets used:
 ### 🚀 Live Bot
 Try the live bot here: [@TeleGuardAIBot](https://t.me/TeleGuardAIBot)
 
-### System Flow
+## System Flow
 
 ![Message Flow](assets/sequence_diagram.png)
 
 
-### Class Structure
+## Class Structure
 
 This diagram shows how components interact within TeleGuard AI:
 
