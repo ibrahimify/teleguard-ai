@@ -1,9 +1,5 @@
 # TeleGuard AI
 
-[![Docker](https://img.shields.io/badge/built%20with-Docker-blue?style=flat-square&logo=docker)](https://www.docker.com/)
-[![Python](https://img.shields.io/badge/python-3.12-blue.svg?logo=python)](https://www.python.org/)
-[![CI/CD](https://img.shields.io/github/actions/workflow/status/ibrahimify/teleguard-ai/docker-build.yml?style=flat-square&logo=github)](https://github.com/ibrahimify/teleguard-ai/actions)
-
 TeleGuard AI is a **real-time Telegram bot** that flags spam messages using an ensemble **TF–IDF + Voting Classifier (Logistic Regression, Naive Bayes, and XGBoost)** trained on 50k+ labeled SMS messages.  
 It is containerized using **Docker** and continuously integrated and deployed with **GitHub Actions CI/CD**.
 
@@ -18,8 +14,6 @@ It is containerized using **Docker** and continuously integrated and deployed wi
 -  **Real-time Telegram Bot** response
 -  **CI/CD Pipeline** with GitHub Actions
 
----
-
 ## Model Overview
 
 - **Training Data**: 50,000+ SMS messages
@@ -30,7 +24,6 @@ It is containerized using **Docker** and continuously integrated and deployed wi
   - Accuracy: ~98.74%
   - F1 Score (Spam class): 0.93+
 
----
 
 ## Running Locally with Docker
 
@@ -54,7 +47,6 @@ docker run -e TELEGRAM_BOT_TOKEN=your_token_here teleguard-ai
 
 > Replace `your_token_here` with your real bot token or use an `.env` file.
 
----
 
 ## .env File
 
@@ -66,7 +58,6 @@ TELEGRAM_BOT_TOKEN=your_token_here
 
 Ensure `.env` is in `.gitignore`.
 
----
 
 ## CI/CD (GitHub Actions)
 
@@ -80,7 +71,6 @@ GitHub Secrets used:
 - `DOCKER_PASSWORD`
 - `TELEGRAM_BOT_TOKEN`
 
----
 
 ## Example Predictions
 
@@ -93,21 +83,16 @@ GitHub Secrets used:
 ### 🚀 Live Bot
 Try the live bot here: [@TeleGuardAIBot](https://t.me/TeleGuardAIBot)
 
----
-
----
-
 ### System Flow
 
 ![Message Flow](assets/sequence_diagram.png)
 
 
-### 🧱 Class Structure
+### Class Structure
 
 This diagram shows how components interact within TeleGuard AI:
 
 ![Class Diagram](assets/class_diagram.png)
----
 
 
 ## 📂 Project Structure
