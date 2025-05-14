@@ -10,16 +10,24 @@ from nltk.stem import PorterStemmer
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
 
-# Download NLTK stopwords if not already present
+#  NLTK setup
 nltk.download('stopwords')
 
-# Initialize logging
+#  Create logs directory if not exists
+if not os.path.exists("logs"):
+    os.makedirs("logs")
+
+#  Configure logging
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
+    level=logging.INFO,
+    handlers=[
+        logging.FileHandler("logs/bot.log"),
+        logging.StreamHandler()
+    ]
 )
 
-# Load model and vectorizer
+#  Load model/vectorizer
 try:
     model = joblib.load("models/spam_classifier_voting.pkl")
     vectorizer = joblib.load("models/tfidf_vectorizer.pkl")
@@ -28,7 +36,7 @@ except Exception as e:
     logging.error(f"❌ Error loading model/vectorizer: {e}")
     exit()
 
-# Preprocessing utilities
+#  Preprocessing
 ps = PorterStemmer()
 def clean_text(text):
     text = re.sub(r"http\S+|www\S+", '', text)
@@ -45,29 +53,26 @@ def predict_message(message):
     prediction = model.predict(features)[0]
     return "🚫 Spam" if prediction == 1 else "✅ Ham"
 
-# Telegram Bot Handlers
+#  Telegram Bot Handlers
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Welcome to TeleGuard AI \U0001F916! Send me a message and I’ll tell you if it’s spam.")
+    await update.message.reply_text("Welcome to TeleGuard AI 🤖! Send me a message and I’ll tell you if it’s spam.")
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_message = update.message.text
     result = predict_message(user_message)
+    logging.info(f"User: {update.effective_user.username}, Message: '{user_message}', Prediction: {result}")
     await update.message.reply_text(f"Prediction: {result}")
 
-# Main
+#  Load .env and token
 if __name__ == '__main__':
-
-
     load_dotenv()
     TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-
 
     if not TOKEN:
         print("❌ TELEGRAM_BOT_TOKEN environment variable not set.")
         exit()
 
     app = ApplicationBuilder().token(TOKEN).build()
-
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
